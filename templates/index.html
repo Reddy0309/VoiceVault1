@@ -161,6 +161,15 @@ VoiceVault
         const statusDiv = document.getElementById("statusMessage");
         let isRecording = false;
 
+        navigator.mediaDevices.getUserMedia({ audio: true })
+    .then((stream) => {
+        console.log("Microphone access granted");
+        // Proceed with recording or handling the stream
+    })
+    .catch((err) => {
+        console.error("Error accessing microphone: ", err);
+    });
+        
         // Show the popup when the help button is clicked
         helpBtn.onclick = function () {
             helpPopup.style.display = "block";
