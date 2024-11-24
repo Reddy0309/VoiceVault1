@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+VoiceVault
+    </title>
+    <link rel="icon" type="image/png" sizes="64x64" href="static/logo-removebg.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almendra+SC&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/styles.css"> <!-- Link to the updated CSS file -->
+    <style>
+        /* Footer at the bottom of the page */
+        footer {
+            background-color: #1a1a2e; /* Dark background color */
+            color: white; /* Text color */
+            padding: 1rem 0; /* Padding around the footer */
+            width: 100%; /* Full width */
+            position: relative;
+            margin-top: auto; 
+        }
+    
+        /* Container to center content */
+        .footer-container {
+            max-width: 1500px;
+            margin: 0 auto; /* Center horizontally */
+            text-align: center; /* Center text */
+            min-height: 8vh; /* Optional height adjustment */
+        }
+    
+        /* Footer text styling */
+        .footer-text p {
+            margin: 0;
+            line-height: 1.5; /* Add spacing between lines */
+        }
+    
+        /* Footer links styling */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Space between links */
+            margin-top: 10px; /* Space between text and links */
+        }
+    
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+    
+        .footer-links a:hover {
+            color: #f39c12; /* Highlight color on hover */
+        }
+            </style>
+</head>
+<body>
+    <div class="text-center button-container"><br />
+        <button id="helpBtn" class="highlight-button">
+            Help
+        </button>
+    </div>
+    <div id="helpPopup" class="popup">
+        <div class="popup-content">
+            <link href="https://fonts.googleapis.com/css2?family=Quintessential&display=swap" rel="stylesheet">
+            <style>
+                .popup {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                    z-index: 1050; /* Ensure it is above other content */
+                    padding: 10px;
+                }
+                .popup-content {
+                    background-color: #fefefe;
+                    margin: 5% auto;
+                    /* 15% from the top and centered */
+                    padding: 20px;
+                    border: 1px solid #888;
+                    border-radius: 15px;
+                    width: 60%;
+                    /* Could be more or less, depending on screen size */
+                    font-family: 'Quintessential', sans-serif;
+                }
+                /* Wrapper to stretch content area */
+                .content {
+                    min-height: 100vh; /* Ensure content area takes up the full screen height */
+                    display: flex;
+                    flex-direction: column;
+                    padding-bottom: 100px;
+                }
+            </style>
+            <span class="close">&times;</span>
+            <h3>User Manual for "VoiceVault"</h3>
+            <p>Welcome to the VoiceVault Application!</p>
+            <p>This application allows you to convert your spoken words in various native languages into English text
+                and serves as an effective translation tool.</p>
+            <h5>Instructions:</h5>
+            <ol>
+                <li><strong>Select Your Language:</strong> Begin by choosing the language you wish to speak and record
+                    your speech in from the dropdown menu provided.</li>
+                <li><strong>Start Recording:</strong> Click the green microphone button below to initiate recording.
+                    When the microphone icon turns red, it indicates that your speech is being recorded for translation.
+                </li>
+                <li><strong>Stop Recording:</strong> Once you have finished speaking, click the red microphone button.
+                    The icon will revert to green, signifying that the recording has stopped, and your speech is now
+                    being translated.</li>
+                <li><strong>View Results:</strong> After the translation process, you will see the text of what you
+                    spoke along with its English translation displayed on the screen.</li>
+            </ol>
+            <p>Thank you for using the VoiceVault application!</p>
+            <p>Click on Close or anywhere in the window to Close and Continue.</p>
+        </div>
+    </div>
+    <div class="container text-center">
+        <h1 style="font-family: 'Almendra SC', serif;">VoiceVault</h1>
+        <form id="languageForm">
+            <div class="form-group">
+                <label for="languageSelect" style="font-family: 'Yatra One', cursive;">Select Language</label>
+                <select id="languageSelect" class="form-select">
+                    <option value="1">Hindi</option>
+                    <option value="2">Telugu</option>
+                    <option value="3">Kannada</option>
+                    <option value="4" selected>English</option>
+                </select>
+            </div>
+            
+        </form>
+<!-- Mic Button -->
+<div class="mt-4">
+    <button id="micBtn" class="btn btn-success rounded-circle">
+        <i class="fa-solid fa-microphone"></i>
+    </button>
+</div>
+<div id="statusMessage" class="mt-3"></div>
+        <div id="result" class="mt-5">
+            <h3 style="font-family: 'Almendra SC', serif;">You said:</h3>
+            <p id="speechText"></p> <!-- Display what was said -->
+        </div>
+        
+        <div id="result" class="mt-5">
+            <h3 style="font-family: 'Almendra SC', serif;">Translation:</h3>
+            <p id="translation"></p>
+            <!--<audio id="audioPlayer" controls></audio> -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        const helpPopup = document.getElementById("helpPopup");
+        const helpBtn = document.getElementById("helpBtn");
+        const closeBtn = document.getElementsByClassName("close")[0];
+        const statusDiv = document.getElementById("statusMessage");
+        let isRecording = false;
+
+        // Show the popup when the help button is clicked
+        helpBtn.onclick = function () {
+            helpPopup.style.display = "block";
+        }
+
+        // Close the popup when the user clicks on <span> (x)
+        closeBtn.onclick = function () {
+            helpPopup.style.display = "none";
+        }
+
+        // Close the popup when the user clicks anywhere outside of the popup
+        window.onclick = function (event) {
+            if (event.target == helpPopup) {
+                helpPopup.style.display = "none";
+            }
+        }
+        async function handleSpeechToText() {
+            const languageChoice = languageSelect.value;
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/translate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ language_choice: languageChoice })
+                });
+
+                const data = await response.json();
+                if (data.translation) {
+                    document.getElementById("speechText").textContent = data.speech;
+                    document.getElementById("translation").textContent = data.translation;
+                    const audio = document.getElementById("audioPlayer");
+                    audio.src = data.audio; // Path to the saved translation MP3
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                <!--alert("There was an issue with the translation service."); -->
+            }
+        }
+
+        micBtn.addEventListener("click", () => {
+            isRecording = !isRecording;
+
+            if (isRecording) {
+                // Start Recording
+                micBtn.classList.remove("btn-success");
+                micBtn.classList.add("btn-danger", "pulse");
+                statusDiv.innerHTML = `<div class="alert alert-info">Listening...</div>`;
+                handleSpeechToText(); // Start translation
+            } else {
+                // Stop Recording
+                micBtn.classList.remove("btn-danger", "pulse");
+                micBtn.classList.add("btn-success");
+                statusDiv.innerHTML = `<div class="alert alert-info">Recording stopped.</div>`;
+            }
+        });
+    </script>
+
+</body>
+<!-- Footer -->
+<footer>
+    <div class="footer-container text-center">
+        <!-- Footer text -->
+        <div class="footer-text mb-3">
+            <p>&copy; 2024 Reddy Tejaswini A.</p>
+            <p>All Rights Reserved.</p>
+            <p>November 2024</p>
+        </div>
+        <!-- Footer links -->
+        <div class="footer-links">
+            <a href="#">Contact:</a>
+            <a href="https://www.linkedin.com/in/reddy-tejaswini-8545b1274/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com/Reddy0309" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+</footer>
+
+</html>
