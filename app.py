@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, jsonify
 import speech_recognition as sr
 from gtts import gTTS
 from deep_translator import GoogleTranslator
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "https://voicevault1.onrender.com"}})
 
 # Define language options
 languages = {
